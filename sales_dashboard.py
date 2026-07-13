@@ -64,17 +64,9 @@ INCLUDED_STATUSES = [
 def load_and_process_data(df):
     """Load and process the dataframe - ONLY INCLUDING SPECIFIED STATUSES"""
     
-    st.write("### Debug: Statuses found in your CSV")
-    unique_statuses = df['status'].unique()
-    st.write(unique_statuses)
-    
     df['status_upper'] = df['status'].str.upper()
     
     df_filtered = df[df['status_upper'].isin([s.upper() for s in INCLUDED_STATUSES])].copy()
-    
-    st.write(f"### Filter Results")
-    st.write(f"Total rows in CSV: {len(df)}")
-    st.write(f"Rows after filtering (only {', '.join(INCLUDED_STATUSES)}): {len(df_filtered)}")
     
     if df_filtered.empty:
         st.error(f"No transactions found with statuses: {', '.join(INCLUDED_STATUSES)}")
@@ -280,20 +272,6 @@ if uploaded_file is not None:
                 )
             else:
                 st.info("No vendor data available")
-        
-        st.markdown('<div class="sub-header">Hourly Sales Heatmap (By Day)</div>', unsafe_allow_html=True)
-        if not metrics['hourly_by_day'].empty:
-            fig_heatmap = px.imshow(
-                metrics['hourly_by_day'].T,
-                title="Sales Heatmap - Hour vs Day",
-                labels={'x': 'Date', 'y': 'Hour', 'color': 'Sales (£)'},
-                color_continuous_scale='RdYlGn',
-                aspect='auto'
-            )
-            fig_heatmap.update_layout(height=500)
-            st.plotly_chart(fig_heatmap, use_container_width=True)
-        else:
-            st.info("Not enough data for heatmap")
         
         st.markdown('<div class="sub-header">Detailed Reports</div>', unsafe_allow_html=True)
         
