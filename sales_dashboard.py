@@ -490,6 +490,10 @@ if uploaded_file is not None:
         metrics = calculate_metrics(sales_df)
         vendor_summary = build_vendor_summary(sales_df)
         daily_summary = build_daily_summary(sales_df)
+        hourly_by_day_summary = metrics["hourly_by_day"].round(2).copy()
+        hourly_by_day_summary.index.name = "Date"
+        hourly_by_day_summary.columns = [str(column) for column in hourly_by_day_summary.columns]
+        hourly_by_day_summary = hourly_by_day_summary.reset_index()
         status_summary = build_status_summary(all_transactions)
         vendor_daily_summary = build_vendor_daily_summary(sales_df)
 
@@ -686,6 +690,7 @@ if uploaded_file is not None:
             [
                 "Vendor Performance",
                 "Daily Breakdown",
+                "Hourly by Day",
                 "Vendor Daily",
                 "Status Summary",
                 "Critical Transactions",
@@ -712,13 +717,21 @@ if uploaded_file is not None:
 
         with tabs[2]:
             show_table_with_downloads(
+                hourly_by_day_summary,
+                "Hourly Sales by Day",
+                "hourly_sales_by_day",
+                "hourly_by_day",
+            )
+
+        with tabs[3]:
+            show_table_with_downloads(
                 vendor_daily_summary,
                 "Vendor Daily",
                 "vendor_daily_sales_fees",
                 "vendor_daily",
             )
 
-        with tabs[3]:
+        with tabs[4]:
             show_table_with_downloads(
                 status_summary,
                 "Status Summary",
@@ -726,7 +739,7 @@ if uploaded_file is not None:
                 "status_summary",
             )
 
-        with tabs[4]:
+        with tabs[5]:
             if critical_transactions.empty:
                 st.success("No critical transactions were found in this file.")
             else:
@@ -742,7 +755,7 @@ if uploaded_file is not None:
                     "critical_transactions",
                 )
 
-        with tabs[5]:
+        with tabs[6]:
             if pending_transactions.empty:
                 st.success("No pending or authorised transactions were found.")
             else:
@@ -758,7 +771,7 @@ if uploaded_file is not None:
                     "pending_transactions",
                 )
 
-        with tabs[6]:
+        with tabs[7]:
             show_table_with_downloads(
                 processed_export,
                 "Processed Raw Data",
@@ -797,6 +810,7 @@ if uploaded_file is not None:
             ),
             "Vendor Performance": vendor_summary,
             "Daily Breakdown": daily_summary,
+            "Hourly by Day": hourly_by_day_summary,
             "Vendor Daily": vendor_daily_summary,
             "Status Summary": status_summary,
             "Critical Transactions": critical_transactions[
