@@ -47,10 +47,12 @@ uploaded_file = st.file_uploader(
 
 VENDOR_MAP = {
     '809-990-578': 'Kacao',
-    '809-990-535': 'Frost&Froth',
-    '809-990-722': 'FatBelly',
-    '809-990-587': 'Broth',
-    '809-990-622': 'Kohitayn'
+    '809-990-535': 'Frost & Froth',
+    '809-990-722': 'Fat Belly',
+    '809-990-587': 'Boba & Chai',
+    '809-990-622': 'Kohitayn',
+    '809-907-812': 'Salsa',
+    '809-907-685': 'Tarbushi'
 }
 
 INCLUDED_STATUSES = [
